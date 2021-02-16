@@ -74,7 +74,7 @@ class MyStatelessWidget extends StatelessWidget {
             ),
             const ListTile(
               leading: Icon(Icons.album),
-              title: Text('Exercice 3'),
+              title: Text('Exercice 4'),
               subtitle: Text('Affichage de tuile'),
             ),
             Row(
@@ -86,6 +86,26 @@ class MyStatelessWidget extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Exo4()),
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+            const ListTile(
+              leading: Icon(Icons.album),
+              title: Text('Exercice 5'),
+              subtitle: Text('Génération du plateau de tuiles'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('Afficher'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Exo5()),
                     );
                   },
                 ),
@@ -263,6 +283,18 @@ class Exo4 extends StatelessWidget {
       onTap: () {
         print("tapped on tile");
       },
+    );
+  }
+}
+
+class Exo5 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Exercice 5'),
+      ),
+      body: Image.asset('picsum3.jpg'),
     );
   }
 }
