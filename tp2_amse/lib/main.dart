@@ -1,4 +1,6 @@
 import 'dart:html';
+import 'dart:js_util';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
@@ -63,7 +65,7 @@ class MyStatelessWidget extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Exo2()),
+                      MaterialPageRoute(builder: (context) => Exo2State()),
                     );
                   },
                 ),
@@ -89,7 +91,16 @@ class Exo1 extends StatelessWidget {
   }
 }
 
-class Exo2 extends StatelessWidget {
+class Exo2State extends StatefulWidget {
+  @override
+  _Exo2 createState() => _Exo2();
+}
+
+class _Exo2 extends State<Exo2State> {
+  double _valueX = 0.0;
+  bool miroir = false;
+  double _scale = 1;
+  int miroirInt = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,9 +108,78 @@ class Exo2 extends StatelessWidget {
         title: Text('Exercice 2'),
       ),
       body: Center(
-        child: Column(
+        child: new Column(
           children: <Widget>[
-            Image.asset('picsum2.jpg'),
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              color: Colors.amber,
+              child: Transform.scale(
+                scale: _scale,
+                child: Transform.rotate(
+                  angle: _valueX,
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(math.pi * miroirInt),
+                    child: Image.asset('picsum2.jpg'),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              child: new Row(
+                children: [
+                  Text('Rotate X'),
+                  Slider(
+                    min: 0,
+                    max: 15,
+                    value: _valueX,
+                    onChanged: (value) {
+                      setState(() {
+                        _valueX = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              child: new Row(
+                children: [
+                  Text('Miroir'),
+                  new Checkbox(
+                    value: miroir,
+                    activeColor: Colors.green,
+                    onChanged: (bool value) {
+                      setState(() {
+                        miroir = value;
+                      });
+                      if (value) {
+                        miroirInt = 1;
+                      } else {
+                        miroirInt = 0;
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              child: new Row(
+                children: [
+                  Text('Scale'),
+                  Slider(
+                    min: 0,
+                    max: 2,
+                    value: _scale,
+                    onChanged: (value) {
+                      setState(() {
+                        _scale = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
