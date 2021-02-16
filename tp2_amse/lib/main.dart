@@ -72,6 +72,26 @@ class MyStatelessWidget extends StatelessWidget {
                 const SizedBox(width: 8),
               ],
             ),
+            const ListTile(
+              leading: Icon(Icons.album),
+              title: Text('Exercice 3'),
+              subtitle: Text('Affichage de tuile'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('Afficher'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Exo4()),
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
           ],
         ),
       ),
@@ -183,6 +203,66 @@ class _Exo2 extends State<Exo2State> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class Tile {
+  String imageURL;
+  Alignment alignment;
+
+  Tile({this.imageURL, this.alignment});
+
+  Widget croppedImageTile() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: this.alignment,
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Tile tile =
+    new Tile(imageURL: 'https://picsum.photos/512', alignment: Alignment(0, 0));
+
+class Exo4 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Exercice 4'),
+        centerTitle: true,
+      ),
+      body: Center(
+          child: Column(children: [
+        SizedBox(
+            width: 150.0,
+            height: 150.0,
+            child: Container(
+                margin: EdgeInsets.all(20.0),
+                child: this.createTileWidgetFrom(tile))),
+        Container(
+            height: 200,
+            child:
+                Image.network('https://picsum.photos/512', fit: BoxFit.cover))
+      ])),
+    );
+  }
+
+  Widget createTileWidgetFrom(Tile tile) {
+    return InkWell(
+      child: tile.croppedImageTile(),
+      onTap: () {
+        print("tapped on tile");
+      },
     );
   }
 }
