@@ -94,7 +94,7 @@ class MyStatelessWidget extends StatelessWidget {
             ),
             const ListTile(
               leading: Icon(Icons.album),
-              title: Text('Exercice 5'),
+              title: Text('Exercice 5a'),
               subtitle: Text('Génération du plateau de tuiles'),
             ),
             Row(
@@ -105,7 +105,27 @@ class MyStatelessWidget extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Exo5()),
+                      MaterialPageRoute(builder: (context) => Exo5a()),
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+            const ListTile(
+              leading: Icon(Icons.album),
+              title: Text('Exercice 5b'),
+              subtitle: Text('Plateau de tuiles avec image'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('Afficher'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Exo5b()),
                     );
                   },
                 ),
@@ -287,14 +307,144 @@ class Exo4 extends StatelessWidget {
   }
 }
 
-class Exo5 extends StatelessWidget {
+class Exo5a extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Exercice 5'),
+        title: Text('Exercice 5a'),
       ),
-      body: Image.asset('picsum3.jpg'),
+      body: Center(
+        child: Container(
+          width: 512,
+          height: 512,
+          child: GridView.count(
+            primary: false,
+            padding: const EdgeInsets.all(20),
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            crossAxisCount: 3,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Tile 1'),
+                color: Colors.teal[100],
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Tile 2'),
+                color: Colors.teal[200],
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Tile 3'),
+                color: Colors.teal[300],
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Tile 4'),
+                color: Colors.teal[400],
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Tile 5'),
+                color: Colors.teal[500],
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Tile 6'),
+                color: Colors.teal[600],
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Tile 7'),
+                color: Colors.teal[700],
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Tile 8'),
+                color: Colors.teal[800],
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Tile 9'),
+                color: Colors.teal[900],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Exo5b extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Exercice 5b'),
+      ),
+      body: Center(
+        child: Container(
+          width: 512,
+          height: 512,
+          child: GridView.count(
+            primary: false,
+            padding: const EdgeInsets.all(20),
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            crossAxisCount: 3,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: this.createTileWidgetFrom(tile),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: this.createTileWidgetFrom(tile),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: this.createTileWidgetFrom(tile),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: this.createTileWidgetFrom(tile),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: this.createTileWidgetFrom(tile),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: this.createTileWidgetFrom(tile),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: this.createTileWidgetFrom(tile),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: this.createTileWidgetFrom(tile),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: this.createTileWidgetFrom(tile),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget createTileWidgetFrom(Tile tile) {
+    return InkWell(
+      child: tile.croppedImageTile(),
+      onTap: () {
+        print("tapped on tile");
+      },
     );
   }
 }
