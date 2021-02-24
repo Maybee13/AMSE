@@ -16,9 +16,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: _title,
       home: Scaffold(
-        appBar: AppBar(title: const Text(_title)),
-        body: MyStatelessWidget(),
-      ),
+          appBar: AppBar(title: const Text(_title)),
+          body: SingleChildScrollView(
+            child: MyStatelessWidget(),
+          )),
     );
   }
 }
@@ -37,6 +38,7 @@ class MyStatelessWidget extends StatelessWidget {
               leading: Icon(Icons.album),
               title: Text('Exercice 1'),
               subtitle: Text('Affichage image'),
+              enabled: true,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -50,7 +52,7 @@ class MyStatelessWidget extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 2),
               ],
             ),
             const ListTile(
@@ -69,7 +71,7 @@ class MyStatelessWidget extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 2),
               ],
             ),
             const ListTile(
@@ -89,7 +91,7 @@ class MyStatelessWidget extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 2),
               ],
             ),
             const ListTile(
@@ -109,7 +111,7 @@ class MyStatelessWidget extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 2),
               ],
             ),
             const ListTile(
@@ -129,7 +131,27 @@ class MyStatelessWidget extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 2),
+              ],
+            ),
+            const ListTile(
+              leading: Icon(Icons.album),
+              title: Text('Exercice 5c'),
+              subtitle: Text('Plateau de tuiles à taille réglable'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('Afficher'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Exo5c()),
+                    );
+                  },
+                ),
+                const SizedBox(width: 2),
               ],
             ),
           ],
@@ -268,6 +290,150 @@ class Tile {
       ),
     );
   }
+
+  Widget croppedImageTile1() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: Alignment.topLeft,
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget croppedImageTile2() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: Alignment.topCenter,
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget croppedImageTile3() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: Alignment.topRight,
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget croppedImageTile4() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget croppedImageTile5() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: Alignment.center,
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget croppedImageTile6() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: Alignment.centerRight,
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget croppedImageTile7() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget croppedImageTile8() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget croppedImageTile9() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: Alignment.bottomRight,
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 Tile tile =
@@ -391,46 +557,46 @@ class Exo5b extends StatelessWidget {
           height: 512,
           child: GridView.count(
             primary: false,
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(0),
             crossAxisSpacing: 5,
             mainAxisSpacing: 5,
             crossAxisCount: 3,
             children: <Widget>[
               Container(
-                padding: const EdgeInsets.all(8),
-                child: this.createTileWidgetFrom(tile),
+                padding: const EdgeInsets.all(0),
+                child: this.createTileWidgetFrom(tile, 1),
               ),
               Container(
-                padding: const EdgeInsets.all(8),
-                child: this.createTileWidgetFrom(tile),
+                padding: const EdgeInsets.all(0),
+                child: this.createTileWidgetFrom(tile, 2),
               ),
               Container(
-                padding: const EdgeInsets.all(8),
-                child: this.createTileWidgetFrom(tile),
+                padding: const EdgeInsets.all(0),
+                child: this.createTileWidgetFrom(tile, 3),
               ),
               Container(
-                padding: const EdgeInsets.all(8),
-                child: this.createTileWidgetFrom(tile),
+                padding: const EdgeInsets.all(0),
+                child: this.createTileWidgetFrom(tile, 4),
               ),
               Container(
-                padding: const EdgeInsets.all(8),
-                child: this.createTileWidgetFrom(tile),
+                padding: const EdgeInsets.all(0),
+                child: this.createTileWidgetFrom(tile, 5),
               ),
               Container(
-                padding: const EdgeInsets.all(8),
-                child: this.createTileWidgetFrom(tile),
+                padding: const EdgeInsets.all(0),
+                child: this.createTileWidgetFrom(tile, 6),
               ),
               Container(
-                padding: const EdgeInsets.all(8),
-                child: this.createTileWidgetFrom(tile),
+                padding: const EdgeInsets.all(0),
+                child: this.createTileWidgetFrom(tile, 7),
               ),
               Container(
-                padding: const EdgeInsets.all(8),
-                child: this.createTileWidgetFrom(tile),
+                padding: const EdgeInsets.all(0),
+                child: this.createTileWidgetFrom(tile, 8),
               ),
               Container(
-                padding: const EdgeInsets.all(8),
-                child: this.createTileWidgetFrom(tile),
+                padding: const EdgeInsets.all(0),
+                child: this.createTileWidgetFrom(tile, 9),
               ),
             ],
           ),
@@ -439,12 +605,70 @@ class Exo5b extends StatelessWidget {
     );
   }
 
-  Widget createTileWidgetFrom(Tile tile) {
-    return InkWell(
-      child: tile.croppedImageTile(),
-      onTap: () {
-        print("tapped on tile");
-      },
+  Widget createTileWidgetFrom(Tile tile, int i) {
+    switch (i) {
+      case (1):
+        {
+          return InkWell(child: tile.croppedImageTile1());
+        }
+        break;
+      case (2):
+        {
+          return InkWell(child: tile.croppedImageTile2());
+        }
+        break;
+      case (3):
+        {
+          return InkWell(child: tile.croppedImageTile3());
+        }
+        break;
+      case (4):
+        {
+          return InkWell(child: tile.croppedImageTile4());
+        }
+        break;
+      case (5):
+        {
+          return InkWell(child: tile.croppedImageTile5());
+        }
+        break;
+      case (6):
+        {
+          return InkWell(child: tile.croppedImageTile6());
+        }
+        break;
+      case (7):
+        {
+          return InkWell(child: tile.croppedImageTile7());
+        }
+        break;
+      case (8):
+        {
+          return InkWell(child: tile.croppedImageTile8());
+        }
+        break;
+      case (9):
+        {
+          return InkWell(child: tile.croppedImageTile9());
+        }
+        break;
+      default:
+        {
+          return InkWell(child: tile.croppedImageTile());
+        }
+        break;
+    }
+  }
+}
+
+class Exo5c extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Exercice 5c'),
+      ),
+      body: Center(),
     );
   }
 }
