@@ -147,7 +147,7 @@ class MyStatelessWidget extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Exo5c()),
+                      MaterialPageRoute(builder: (context) => Exo5cState()),
                     );
                   },
                 ),
@@ -189,80 +189,82 @@ class _Exo2 extends State<Exo2State> {
       appBar: AppBar(
         title: Text('Exercice 2'),
       ),
-      body: Center(
-        child: new Column(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              color: Colors.amber,
-              child: Transform.scale(
-                scale: _scale,
-                child: Transform.rotate(
-                  angle: _valueX,
-                  child: Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationY(math.pi * miroirInt),
-                    child: Image.asset('picsum2.jpg'),
+      body: SingleChildScrollView(
+        child: Center(
+          child: new Column(
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                color: Colors.amber,
+                child: Transform.scale(
+                  scale: _scale,
+                  child: Transform.rotate(
+                    angle: _valueX,
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(math.pi * miroirInt),
+                      child: Image.asset('picsum2.jpg'),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              child: new Row(
-                children: [
-                  Text('Rotate X'),
-                  Slider(
-                    min: 0,
-                    max: 15,
-                    value: _valueX,
-                    onChanged: (value) {
-                      setState(() {
-                        _valueX = value;
-                      });
-                    },
-                  ),
-                ],
+              Container(
+                child: new Row(
+                  children: [
+                    Text('Rotate X'),
+                    Slider(
+                      min: 0,
+                      max: 15,
+                      value: _valueX,
+                      onChanged: (value) {
+                        setState(() {
+                          _valueX = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              child: new Row(
-                children: [
-                  Text('Miroir'),
-                  new Checkbox(
-                    value: miroir,
-                    activeColor: Colors.green,
-                    onChanged: (bool value) {
-                      setState(() {
-                        miroir = value;
-                      });
-                      if (value) {
-                        miroirInt = 1;
-                      } else {
-                        miroirInt = 0;
-                      }
-                    },
-                  ),
-                ],
+              Container(
+                child: new Row(
+                  children: [
+                    Text('Miroir'),
+                    new Checkbox(
+                      value: miroir,
+                      activeColor: Colors.green,
+                      onChanged: (bool value) {
+                        setState(() {
+                          miroir = value;
+                        });
+                        if (value) {
+                          miroirInt = 1;
+                        } else {
+                          miroirInt = 0;
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              child: new Row(
-                children: [
-                  Text('Scale'),
-                  Slider(
-                    min: 0,
-                    max: 2,
-                    value: _scale,
-                    onChanged: (value) {
-                      setState(() {
-                        _scale = value;
-                      });
-                    },
-                  ),
-                ],
+              Container(
+                child: new Row(
+                  children: [
+                    Text('Scale'),
+                    Slider(
+                      min: 0,
+                      max: 2,
+                      value: _scale,
+                      onChanged: (value) {
+                        setState(() {
+                          _scale = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -439,14 +441,114 @@ class Exo5b extends StatelessWidget {
   }
 }
 
-class Exo5c extends StatelessWidget {
+class Exo5cState extends StatefulWidget {
+  @override
+  _Exo5c createState() => _Exo5c();
+}
+
+TileList tileList = new TileList(size: 3);
+
+class _Exo5c extends State<Exo5cState> {
+  double _size = 3;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Exercice 5c'),
       ),
-      body: Center(),
+      body: Center(
+        child: SingleChildScrollView(
+          child: new Column(
+            children: <Widget>[
+              Container(
+                width: 516,
+                height: 516,
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 1,
+                      crossAxisSpacing: 0,
+                      mainAxisSpacing: 0),
+                  itemBuilder: (BuildContext ctx, index) {
+                    return Container(
+                      width: 516,
+                      height: 516,
+                      alignment: Alignment.center,
+                      child: tileList.createTileWidgetFrom(
+                        tileList.getTilesList()[index]["image"],
+                        tileList.getTilesList()[index]["tileNum"],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Container(
+                child: new Row(
+                  children: [
+                    Text('Size'),
+                    Slider(
+                      min: 3,
+                      max: 8,
+                      divisions: 5,
+                      value: _size,
+                      onChanged: (value) {
+                        setState(() {
+                          _size = value;
+                          tileList.size = _size;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
+  }
+}
+
+class TileList {
+  double size = 3;
+
+  TileList({this.size});
+
+  List<Map> getTilesList() {
+    List<Map> finalTiles = List.generate(
+        this.size.toInt() * this.size.toInt(),
+        (index) => {
+              "id": index,
+              "image": tile,
+              "tileNum": index + 1,
+            }).toList();
+    return (finalTiles);
+  }
+
+  // ignore: missing_return
+  int findCorrespondingLine(int tileNum) {
+    for (int i = 1; i <= this.size.toInt(); i++) {
+      if ((tileNum / this.size.toInt()) <= i) {
+        return ((2 * i) - 1);
+      }
+    }
+    return ((2 * this.size.toInt()) - 1);
+  }
+
+  // ignore: missing_return
+  int findCorrespondingColumn(int tileNum) {
+    for (int i = 1; i <= this.size.toInt(); i++) {
+      if (tileNum % this.size.toInt() == i) {
+        return ((2 * i) - 1);
+      }
+    }
+    return ((2 * this.size.toInt()) - 1);
+  }
+
+  Widget createTileWidgetFrom(Tile tile, int i) {
+    double y = ((1 / this.size) * findCorrespondingLine(i)) - 1;
+    double x = ((1 / this.size) * findCorrespondingColumn(i)) - 1;
+    tile.alignment = Alignment(x, y);
+    return InkWell(child: tile.croppedImageTile());
   }
 }
