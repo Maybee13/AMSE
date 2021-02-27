@@ -290,150 +290,6 @@ class Tile {
       ),
     );
   }
-
-  Widget croppedImageTile1() {
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: ClipRect(
-        child: Container(
-          child: Align(
-            alignment: Alignment.topLeft,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
-            child: Image.network(this.imageURL),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget croppedImageTile2() {
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: ClipRect(
-        child: Container(
-          child: Align(
-            alignment: Alignment.topCenter,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
-            child: Image.network(this.imageURL),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget croppedImageTile3() {
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: ClipRect(
-        child: Container(
-          child: Align(
-            alignment: Alignment.topRight,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
-            child: Image.network(this.imageURL),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget croppedImageTile4() {
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: ClipRect(
-        child: Container(
-          child: Align(
-            alignment: Alignment.centerLeft,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
-            child: Image.network(this.imageURL),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget croppedImageTile5() {
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: ClipRect(
-        child: Container(
-          child: Align(
-            alignment: Alignment.center,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
-            child: Image.network(this.imageURL),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget croppedImageTile6() {
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: ClipRect(
-        child: Container(
-          child: Align(
-            alignment: Alignment.centerRight,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
-            child: Image.network(this.imageURL),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget croppedImageTile7() {
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: ClipRect(
-        child: Container(
-          child: Align(
-            alignment: Alignment.bottomLeft,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
-            child: Image.network(this.imageURL),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget croppedImageTile8() {
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: ClipRect(
-        child: Container(
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
-            child: Image.network(this.imageURL),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget croppedImageTile9() {
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: ClipRect(
-        child: Container(
-          child: Align(
-            alignment: Alignment.bottomRight,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
-            child: Image.network(this.imageURL),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 Tile tile =
@@ -473,6 +329,14 @@ class Exo4 extends StatelessWidget {
   }
 }
 
+final List<Map> mySimpleTiles = List.generate(
+    9,
+    (index) => {
+          "id": index,
+          "name": "Tile $index",
+          "color": (index + 1) * 100
+        }).toList();
+
 class Exo5a extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -484,65 +348,36 @@ class Exo5a extends StatelessWidget {
         child: Container(
           width: 512,
           height: 512,
-          child: GridView.count(
-            primary: false,
-            padding: const EdgeInsets.all(20),
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5,
-            crossAxisCount: 3,
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Tile 1'),
-                color: Colors.teal[100],
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Tile 2'),
-                color: Colors.teal[200],
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Tile 3'),
-                color: Colors.teal[300],
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Tile 4'),
-                color: Colors.teal[400],
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Tile 5'),
-                color: Colors.teal[500],
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Tile 6'),
-                color: Colors.teal[600],
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Tile 7'),
-                color: Colors.teal[700],
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Tile 8'),
-                color: Colors.teal[800],
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Tile 9'),
-                color: Colors.teal[900],
-              ),
-            ],
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                childAspectRatio: 1,
+                crossAxisSpacing: 1,
+                mainAxisSpacing: 1),
+            itemCount: mySimpleTiles.length,
+            itemBuilder: (BuildContext ctx, index) {
+              return Container(
+                width: 512,
+                height: 512,
+                alignment: Alignment.center,
+                child: Text(mySimpleTiles[index]["name"]),
+                color: Colors.teal[mySimpleTiles[index]["color"]],
+              );
+            },
           ),
         ),
       ),
     );
   }
 }
+
+final List<Map> myNineTiles = List.generate(
+    9,
+    (index) => {
+          "id": index,
+          "image": tile,
+          "tileNum": index + 1,
+        }).toList();
 
 class Exo5b extends StatelessWidget {
   @override
@@ -555,109 +390,52 @@ class Exo5b extends StatelessWidget {
         child: Container(
           width: 512,
           height: 512,
-          child: GridView.count(
-            primary: false,
-            padding: const EdgeInsets.all(0),
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5,
-            crossAxisCount: 3,
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(0),
-                child: this.createTileWidgetFrom(tile, 1),
-              ),
-              Container(
-                padding: const EdgeInsets.all(0),
-                child: this.createTileWidgetFrom(tile, 2),
-              ),
-              Container(
-                padding: const EdgeInsets.all(0),
-                child: this.createTileWidgetFrom(tile, 3),
-              ),
-              Container(
-                padding: const EdgeInsets.all(0),
-                child: this.createTileWidgetFrom(tile, 4),
-              ),
-              Container(
-                padding: const EdgeInsets.all(0),
-                child: this.createTileWidgetFrom(tile, 5),
-              ),
-              Container(
-                padding: const EdgeInsets.all(0),
-                child: this.createTileWidgetFrom(tile, 6),
-              ),
-              Container(
-                padding: const EdgeInsets.all(0),
-                child: this.createTileWidgetFrom(tile, 7),
-              ),
-              Container(
-                padding: const EdgeInsets.all(0),
-                child: this.createTileWidgetFrom(tile, 8),
-              ),
-              Container(
-                padding: const EdgeInsets.all(0),
-                child: this.createTileWidgetFrom(tile, 9),
-              ),
-            ],
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                childAspectRatio: 1,
+                crossAxisSpacing: 0,
+                mainAxisSpacing: 0),
+            itemBuilder: (BuildContext ctx, index) {
+              return Container(
+                width: 512,
+                height: 512,
+                alignment: Alignment.center,
+                child: this.createTileWidgetFrom(
+                    myNineTiles[index]["image"], myNineTiles[index]["tileNum"]),
+              );
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget createTileWidgetFrom(Tile tile, int i) {
-    switch (i) {
-      case (1):
-        {
-          return InkWell(child: tile.croppedImageTile1());
-        }
-        break;
-      case (2):
-        {
-          return InkWell(child: tile.croppedImageTile2());
-        }
-        break;
-      case (3):
-        {
-          return InkWell(child: tile.croppedImageTile3());
-        }
-        break;
-      case (4):
-        {
-          return InkWell(child: tile.croppedImageTile4());
-        }
-        break;
-      case (5):
-        {
-          return InkWell(child: tile.croppedImageTile5());
-        }
-        break;
-      case (6):
-        {
-          return InkWell(child: tile.croppedImageTile6());
-        }
-        break;
-      case (7):
-        {
-          return InkWell(child: tile.croppedImageTile7());
-        }
-        break;
-      case (8):
-        {
-          return InkWell(child: tile.croppedImageTile8());
-        }
-        break;
-      case (9):
-        {
-          return InkWell(child: tile.croppedImageTile9());
-        }
-        break;
-      default:
-        {
-          return InkWell(child: tile.croppedImageTile());
-        }
-        break;
+  int findCorrespondingLine(int tileNum) {
+    if ((tileNum / 3) <= 1) {
+      return (1);
+    } else if ((tileNum / 3) <= 2) {
+      return (3);
+    } else {
+      return (5);
     }
+  }
+
+  int findCorrespondingColumn(int tileNum) {
+    if ((tileNum % 3 == 1)) {
+      return (1);
+    } else if ((tileNum % 3 == 2)) {
+      return (3);
+    } else {
+      return (5);
+    }
+  }
+
+  Widget createTileWidgetFrom(Tile tile, int i) {
+    double y = ((1 / 3) * findCorrespondingLine(i)) - 1;
+    double x = ((1 / 3) * findCorrespondingColumn(i)) - 1;
+    tile.alignment = Alignment(x, y);
+    return InkWell(child: tile.croppedImageTile());
   }
 }
 
