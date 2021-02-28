@@ -277,15 +277,15 @@ class Tile {
 
   Tile({this.imageURL, this.alignment});
 
-  Widget croppedImageTile() {
+  Widget croppedImageTile(double size) {
     return FittedBox(
       fit: BoxFit.fill,
       child: ClipRect(
         child: Container(
           child: Align(
             alignment: this.alignment,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
+            widthFactor: 1 / size,
+            heightFactor: 1 / size,
             child: Image.network(this.imageURL),
           ),
         ),
@@ -323,7 +323,7 @@ class Exo4 extends StatelessWidget {
 
   Widget createTileWidgetFrom(Tile tile) {
     return InkWell(
-      child: tile.croppedImageTile(),
+      child: tile.croppedImageTile(3),
       onTap: () {
         print("tapped on tile");
       },
@@ -393,6 +393,7 @@ class Exo5b extends StatelessWidget {
           width: 512,
           height: 512,
           child: GridView.builder(
+            itemCount: 9,
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 200,
                 childAspectRatio: 1,
@@ -437,7 +438,7 @@ class Exo5b extends StatelessWidget {
     double y = ((1 / 3) * findCorrespondingLine(i)) - 1;
     double x = ((1 / 3) * findCorrespondingColumn(i)) - 1;
     tile.alignment = Alignment(x, y);
-    return InkWell(child: tile.croppedImageTile());
+    return InkWell(child: tile.croppedImageTile(3));
   }
 }
 
@@ -464,11 +465,12 @@ class _Exo5c extends State<Exo5cState> {
                 width: 516,
                 height: 516,
                 child: GridView.builder(
+                  itemCount: (_size * _size).toInt(),
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
+                      maxCrossAxisExtent: (516 / _size) + 5,
                       childAspectRatio: 1,
-                      crossAxisSpacing: 0,
-                      mainAxisSpacing: 0),
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 2),
                   itemBuilder: (BuildContext ctx, index) {
                     return Container(
                       width: 516,
@@ -516,7 +518,7 @@ class TileList {
 
   List<Map> getTilesList() {
     List<Map> finalTiles = List.generate(
-        this.size.toInt() * this.size.toInt(),
+        (this.size * this.size).toInt(),
         (index) => {
               "id": index,
               "image": tile,
@@ -549,6 +551,6 @@ class TileList {
     double y = ((1 / this.size) * findCorrespondingLine(i)) - 1;
     double x = ((1 / this.size) * findCorrespondingColumn(i)) - 1;
     tile.alignment = Alignment(x, y);
-    return InkWell(child: tile.croppedImageTile());
+    return InkWell(child: tile.croppedImageTile(this.size));
   }
 }
