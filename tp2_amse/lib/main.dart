@@ -154,6 +154,26 @@ class MyStatelessWidget extends StatelessWidget {
                 const SizedBox(width: 2),
               ],
             ),
+            const ListTile(
+              leading: Icon(Icons.album),
+              title: Text('Exercice 6'),
+              subtitle: Text('Animation de tuile'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('Afficher'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Exo6()),
+                    );
+                  },
+                ),
+                const SizedBox(width: 2),
+              ],
+            ),
           ],
         ),
       ),
@@ -274,6 +294,7 @@ class _Exo2 extends State<Exo2State> {
 class Tile {
   String imageURL;
   Alignment alignment;
+  Color color;
 
   Tile({this.imageURL, this.alignment});
 
@@ -284,6 +305,26 @@ class Tile {
         child: Container(
           child: Align(
             alignment: this.alignment,
+            widthFactor: 1 / size,
+            heightFactor: 1 / size,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget croppedImageTile2(int index, int size) {
+    int q = index ~/ size;
+    int r = index % size;
+    int n = size - 1;
+
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: FractionalOffset(r / n, q / n),
             widthFactor: 1 / size,
             heightFactor: 1 / size,
             child: Image.network(this.imageURL),
@@ -444,66 +485,128 @@ class Exo5b extends StatelessWidget {
 
 class Exo5cState extends StatefulWidget {
   @override
-  _Exo5c createState() => _Exo5c();
+  _Exercice5cState createState() => _Exercice5cState();
 }
 
-TileList tileList = new TileList(size: 3);
-
-class _Exo5c extends State<Exo5cState> {
-  double _size = 3;
+class _Exercice5cState extends State<Exo5cState> {
+  double size = 3;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Exercice 5c'),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: new Column(
-            children: <Widget>[
-              Container(
-                width: 516,
-                height: 516,
+      body: Container(
+        width: 516,
+        height: 516,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: SizedBox(
+                height: 500,
                 child: GridView.builder(
-                  itemCount: (_size * _size).toInt(),
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: (516 / _size) + 5,
-                      childAspectRatio: 1,
-                      crossAxisSpacing: 2,
-                      mainAxisSpacing: 2),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: size.toInt(),
+                      crossAxisSpacing: 1,
+                      mainAxisSpacing: 1),
+                  itemCount: math.pow(size.toInt(), 2),
                   itemBuilder: (BuildContext ctx, index) {
                     return Container(
-                      width: 516,
-                      height: 516,
                       alignment: Alignment.center,
-                      child: tileList.createTileWidgetFrom(
-                        tileList.getTilesList()[index]["image"],
-                        tileList.getTilesList()[index]["tileNum"],
-                      ),
+                      child: Column(children: [
+                        SizedBox(
+                          width: ((375 - (size - 1) * 4) / size) + 20,
+                          height: ((375 - (size - 1) * 4) / size) + 20,
+                          child: Container(
+                            margin: EdgeInsets.all(0.0),
+                            child: this.createTileWidgetFrom2(
+                                tile, index, size.toInt()),
+                          ),
+                        ),
+                      ]),
                     );
                   },
                 ),
               ),
-              Container(
-                child: new Row(
-                  children: [
-                    Text('Size'),
-                    Slider(
-                      min: 3,
-                      max: 8,
-                      divisions: 5,
-                      value: _size,
-                      onChanged: (value) {
-                        setState(() {
-                          _size = value;
-                          tileList.size = _size;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
+            Slider(
+              min: 3.0,
+              max: 8.0,
+              activeColor: Colors.blue,
+              inactiveColor: Colors.grey,
+              divisions: 5,
+              value: size,
+              label: size.round().toString(),
+              onChanged: (double value) {
+                setState(() {
+                  size = value;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget createTileWidgetFrom2(Tile tile, int index, int taille) {
+    return InkWell(
+      child: tile.croppedImageTile2(index, taille),
+      onTap: () {
+        print("tapped on tile");
+      },
+    );
+  }
+}
+
+math.Random random = new math.Random();
+
+class Tile2 {
+  Color color;
+
+  Tile2(this.color);
+  Tile2.randomColor() {
+    this.color = Color.fromARGB(
+        255, random.nextInt(255), random.nextInt(255), random.nextInt(255));
+  }
+}
+
+class Tile3 {
+  String image;
+  int index;
+
+  Tile3({this.image, this.index});
+
+  Widget getCroppedTile() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            alignment: Alignment.centerLeft,
+            child: Image.network(this.image),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget newCroppedTile(int size) {
+    int quot = index ~/ size;
+    int rest = index % size;
+    int n = size - 1;
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            widthFactor: 1 / size,
+            heightFactor: 1 / size,
+            alignment: FractionalOffset(rest / n, quot / n),
+            child: Image.network(this.image),
           ),
         ),
       ),
@@ -511,46 +614,96 @@ class _Exo5c extends State<Exo5cState> {
   }
 }
 
-class TileList {
+class Exo6 extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => Exo6State();
+}
+
+class Exo6State extends State<Exo6> {
   double size = 3;
-
-  TileList({this.size});
-
-  List<Map> getTilesList() {
-    List<Map> finalTiles = List.generate(
-        (this.size * this.size).toInt(),
-        (index) => {
-              "id": index,
-              "image": tile,
-              "tileNum": index + 1,
-            }).toList();
-    return (finalTiles);
+  List<Tile3> tiles;
+  @override
+  void initState() {
+    super.initState();
+    tiles = initTiles();
   }
 
-  // ignore: missing_return
-  int findCorrespondingLine(int tileNum) {
-    for (int i = 1; i <= this.size.toInt(); i++) {
-      if ((tileNum / this.size.toInt()) <= i) {
-        return ((2 * i) - 1);
-      }
+  List<Tile3> initTiles() {
+    return (List.generate(
+        (size * size).toInt(),
+        (index) =>
+            new Tile3(image: 'https://picsum.photos/512', index: index)));
+  }
+
+  List<Widget> getTileWidgets(List<Tile3> initTiles) {
+    List<Widget> tiles = [];
+    for (var i = 0; i < (size * size).toInt(); i++) {
+      tiles.add(createTileWidgetFrom(initTiles[i], i, size.toInt()));
     }
-    return ((2 * this.size.toInt()) - 1);
+    return tiles;
   }
 
-  // ignore: missing_return
-  int findCorrespondingColumn(int tileNum) {
-    for (int i = 1; i <= this.size.toInt(); i++) {
-      if (tileNum % this.size.toInt() == i) {
-        return ((2 * i) - 1);
-      }
-    }
-    return ((2 * this.size.toInt()) - 1);
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Exercice 6'),
+      ),
+      body: Container(
+        width: 516,
+        height: 516,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: SizedBox(
+                height: 500,
+                child: GridView.count(
+                  padding: const EdgeInsets.all(0),
+                  crossAxisCount: size.toInt(),
+                  crossAxisSpacing: 2,
+                  mainAxisSpacing: 2,
+                  primary: false,
+                  children: getTileWidgets(tiles),
+                ),
+              ),
+            ),
+            Slider(
+              min: 3.0,
+              max: 8.0,
+              divisions: 5,
+              value: size,
+              onChanged: (double value) {
+                setState(() {
+                  size = value;
+                  tiles = initTiles();
+                });
+              },
+            )
+          ],
+        ),
+      ),
+    );
   }
 
-  Widget createTileWidgetFrom(Tile tile, int i) {
-    double y = ((1 / this.size) * findCorrespondingLine(i)) - 1;
-    double x = ((1 / this.size) * findCorrespondingColumn(i)) - 1;
-    tile.alignment = Alignment(x, y);
-    return InkWell(child: tile.croppedImageTile(this.size));
+  Widget createTileWidgetFrom(
+    //Tile to Widget
+    Tile3 plateau,
+    int index,
+    int size,
+  ) {
+    Widget tuile;
+    tuile = plateau.newCroppedTile(size);
+    return InkWell(
+      child: tuile,
+      onTap: () {
+        swapTile(index);
+      },
+    );
+  }
+
+  swapTile(int index) {
+    setState(() {
+      tiles.insert(index, tiles.removeAt(index + 1));
+    });
   }
 }
