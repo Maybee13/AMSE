@@ -174,6 +174,25 @@ class MyStatelessWidget extends StatelessWidget {
                 const SizedBox(width: 2),
               ],
             ),
+            const ListTile(
+              leading: Icon(Icons.album),
+              title: Text('Jeu de Taquin'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('Afficher'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => JeuTaquin()),
+                    );
+                  },
+                ),
+                const SizedBox(width: 2),
+              ],
+            ),
           ],
         ),
       ),
@@ -422,64 +441,52 @@ final List<Map> myNineTiles = List.generate(
           "tileNum": index + 1,
         }).toList();
 
-class Exo5b extends StatelessWidget {
+class Exo5b extends StatefulWidget {
+  @override
+  Exo5bState createState() => Exo5bState();
+}
+
+class Exo5bState extends State<Exo5b> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Exercice 5b'),
       ),
-      body: Center(
-        child: Container(
-          width: 512,
-          height: 512,
-          child: GridView.builder(
-            itemCount: 9,
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
-                childAspectRatio: 1,
-                crossAxisSpacing: 0,
-                mainAxisSpacing: 0),
-            itemBuilder: (BuildContext ctx, index) {
-              return Container(
-                width: 512,
-                height: 512,
-                alignment: Alignment.center,
-                child: this.createTileWidgetFrom(
-                    myNineTiles[index]["image"], myNineTiles[index]["tileNum"]),
-              );
-            },
-          ),
+      body: Container(
+        width: 512,
+        height: 512,
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3, crossAxisSpacing: 2, mainAxisSpacing: 2),
+          itemCount: 9,
+          itemBuilder: (BuildContext ctx, index) {
+            return Container(
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  SizedBox(
+                      width: ((375 - 8) / 3) + 40,
+                      height: ((375 - 8) / 3) + 40,
+                      child: Container(
+                          margin: EdgeInsets.all(0.0),
+                          child: this.createTileWidgetFrom2(tile, index, 3))),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
   }
 
-  int findCorrespondingLine(int tileNum) {
-    if ((tileNum / 3) <= 1) {
-      return (1);
-    } else if ((tileNum / 3) <= 2) {
-      return (3);
-    } else {
-      return (5);
-    }
-  }
-
-  int findCorrespondingColumn(int tileNum) {
-    if ((tileNum % 3 == 1)) {
-      return (1);
-    } else if ((tileNum % 3 == 2)) {
-      return (3);
-    } else {
-      return (5);
-    }
-  }
-
-  Widget createTileWidgetFrom(Tile tile, int i) {
-    double y = ((1 / 3) * findCorrespondingLine(i)) - 1;
-    double x = ((1 / 3) * findCorrespondingColumn(i)) - 1;
-    tile.alignment = Alignment(x, y);
-    return InkWell(child: tile.croppedImageTile(3));
+  Widget createTileWidgetFrom2(Tile tile, int index, int taille) {
+    return InkWell(
+      child: tile.croppedImageTile2(index, taille),
+      onTap: () {
+        print("tapped on tile");
+      },
+    );
   }
 }
 
@@ -705,5 +712,160 @@ class Exo6State extends State<Exo6> {
     setState(() {
       tiles.insert(index, tiles.removeAt(index + 1));
     });
+  }
+}
+
+class CaseVide {
+  int index;
+
+  CaseVide({this.index});
+
+  Widget newCroppedImageTile(int size) {
+    int quot = index ~/ size;
+    int rest = index % size;
+    int n = size - 1;
+
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: FractionalOffset(rest / n, quot / n),
+            widthFactor: 1 / size,
+            heightFactor: 1 / size,
+            child: Container(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class JeuTaquin extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => JeuTaquinState();
+}
+
+class JeuTaquinState extends State<JeuTaquin> {
+  double size = 3;
+  List<Tile3> tiles;
+  int indexVide = 6;
+  @override
+  void initState() {
+    super.initState();
+    tiles = initTiles();
+  }
+
+  List<Tile3> initTiles() {
+    return (List.generate(
+        (size * size).toInt(),
+        (index) =>
+            new Tile3(image: 'https://picsum.photos/512', index: index)));
+  }
+
+  List<Widget> getTileWidgets(List<Tile3> initTiles) {
+    List<Widget> tiles = [];
+    CaseVide caseVide = CaseVide(index: indexVide);
+    for (var i = 0; i < (size * size).toInt(); i++) {
+      if (i == indexVide) {
+        tiles.add(caseVide.newCroppedImageTile(size.toInt()));
+      } else {
+        tiles.add(createTileWidgetFrom(initTiles[i], i, size.toInt()));
+      }
+    }
+    return tiles;
+  }
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Jeu de Taquin'),
+      ),
+      body: Container(
+        width: 516,
+        height: 600,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: SizedBox(
+                height: 500,
+                child: GridView.count(
+                  padding: const EdgeInsets.all(0),
+                  crossAxisCount: size.toInt(),
+                  crossAxisSpacing: 2,
+                  mainAxisSpacing: 2,
+                  primary: false,
+                  children: getTileWidgets(tiles),
+                ),
+              ),
+            ),
+            Slider(
+              min: 3.0,
+              max: 8.0,
+              divisions: 5,
+              value: size,
+              onChanged: (double value) {
+                setState(
+                  () {
+                    size = value;
+                    tiles = initTiles();
+                    indexVide = value.toInt() * (value.toInt() - 1);
+                  },
+                );
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget createTileWidgetFrom(
+    //Tile to Widget
+    Tile3 plateau,
+    int index,
+    int size,
+  ) {
+    Widget tuile;
+    tuile = plateau.newCroppedTile(size);
+    return InkWell(
+      child: tuile,
+      onTap: () {
+        swapTile(index);
+      },
+    );
+  }
+
+  swapTile(int index) {
+    if (indexVide == size.toInt() + index) {
+      setState(() {
+        tiles.insert(index, tiles.removeAt(indexVide));
+        tiles.insert(indexVide, tiles.removeAt(index + 1));
+        indexVide = index;
+      });
+    }
+    if (indexVide == index - size.toInt()) {
+      setState(() {
+        tiles.insert(indexVide, tiles.removeAt(index));
+        tiles.insert(index, tiles.removeAt(indexVide + 1));
+        indexVide = index;
+      });
+    }
+    if ((indexVide % size.toInt() != 0) && (indexVide == index + 1)) {
+      setState(() {
+        tiles.insert(index, tiles.removeAt(indexVide));
+        indexVide = index;
+      });
+    }
+    if ((indexVide % size.toInt() != size.toInt() - 1) &&
+        (indexVide == index - 1)) {
+      setState(() {
+        tiles.insert(indexVide, tiles.removeAt(indexVide));
+        indexVide = index;
+      });
+    }
   }
 }
