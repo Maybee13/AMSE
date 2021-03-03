@@ -751,7 +751,7 @@ class JeuTaquin extends StatefulWidget {
 class JeuTaquinState extends State<JeuTaquin> {
   double size = 3;
   List<Tile3> tiles;
-  int indexVide = 6;
+  int indexVide = 9;
   @override
   void initState() {
     super.initState();
@@ -824,7 +824,6 @@ class JeuTaquinState extends State<JeuTaquin> {
   }
 
   Widget createTileWidgetFrom(
-    //Tile to Widget
     Tile3 plateau,
     int index,
     int size,
